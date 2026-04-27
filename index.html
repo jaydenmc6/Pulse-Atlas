@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PulseAtlas</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="app.js"></script>
+  </head>
+  <body>
+    <div class="backdrop"></div>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand-lockup">
+          <div class="brand-mark">PA</div>
+          <div>
+            <p class="eyebrow">Local maps for what actually matters tonight</p>
+            <h1>PulseAtlas</h1>
+          </div>
+        </div>
+
+        <div class="search-column">
+          <label class="search-field" for="searchInput">
+            <span>Find a spot, plan, or vibe</span>
+            <input
+              id="searchInput"
+              type="search"
+              placeholder="Rooftop jazz, cheap bites, active groups..."
+            />
+          </label>
+
+          <div class="mode-switch" role="tablist" aria-label="Experience mode">
+            <button class="mode-chip active" data-mode="discover">Discover</button>
+            <button class="mode-chip" data-mode="move">Move</button>
+            <button class="mode-chip" data-mode="social">Social</button>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <button class="ghost-toggle" id="ghostToggle">Ghost mode off</button>
+          <p class="status-copy">4 friends roaming nearby</p>
+        </div>
+      </header>
+
+      <main class="dashboard">
+        <aside class="panel discover-panel">
+          <section class="panel-section hero-card">
+            <p class="section-label">Tonight in Riverline</p>
+            <h2>Discover what is worth leaving the house for.</h2>
+            <p class="support-copy">
+              PulseAtlas merges live local buzz, route friction, crowd stories,
+              and neighborhood threads so you can decide faster.
+            </p>
+            <button class="primary-action" id="buildPlanBtn">Build my night</button>
+          </section>
+
+          <section class="panel-section">
+            <div class="section-heading">
+              <h3>Filters</h3>
+              <span>High intent, low scrolling</span>
+            </div>
+            <div class="filter-row" id="filterRow">
+              <button class="filter-chip active" data-filter="all">All energy</button>
+              <button class="filter-chip" data-filter="food">Food</button>
+              <button class="filter-chip" data-filter="music">Music</button>
+              <button class="filter-chip" data-filter="outdoors">Outdoors</button>
+              <button class="filter-chip" data-filter="cheap">Cheap</button>
+              <button class="filter-chip" data-filter="group">Group vibe</button>
+            </div>
+          </section>
+
+          <section class="panel-section">
+            <div class="section-heading">
+              <h3>Near you now</h3>
+              <span>Ranked by live momentum</span>
+            </div>
+            <div class="spot-list" id="spotList"></div>
+          </section>
+
+          <section class="panel-section">
+            <div class="section-heading">
+              <h3>Auto plan</h3>
+              <span>Best route for your current mode</span>
+            </div>
+            <div class="itinerary-card" id="itineraryCard">
+              <p class="itinerary-title">Tap “Build my night” to generate a crawl.</p>
+              <div class="itinerary-steps" id="itinerarySteps"></div>
+            </div>
+          </section>
+        </aside>
+
+        <section class="map-panel">
+          <div class="map-toolbar">
+            <div class="toolbar-copy">
+              <p class="section-label">Live layers</p>
+              <h2>Riverline right now</h2>
+            </div>
+            <div class="layer-row" id="layerRow">
+              <button class="layer-chip active" data-layer="all">Everything</button>
+              <button class="layer-chip active" data-layer="stories">Stories</button>
+              <button class="layer-chip active" data-layer="threads">Threads</button>
+              <button class="layer-chip active" data-layer="alerts">Alerts</button>
+            </div>
+          </div>
+
+          <div class="map-stage" id="mapStage">
+            <svg class="route-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M14,64 C22,46 28,44 40,48 S58,58 72,44 84,30 90,28" />
+              <path d="M8,20 C24,24 28,20 36,14 S52,10 64,24 78,44 90,52" />
+              <path d="M24,82 C34,72 42,72 54,78 S74,88 86,82" />
+            </svg>
+
+            <div class="district district-north">Warehouse Arts</div>
+            <div class="district district-center">Canal Core</div>
+            <div class="district district-south">Harbor Steps</div>
+            <div class="district district-west">Sunset Common</div>
+            <div class="district district-east">Neon Row</div>
+
+            <div class="story-strip" id="storyStrip"></div>
+            <div class="map-markers" id="mapMarkers"></div>
+
+            <article class="detail-card" id="detailCard" aria-live="polite">
+              <p class="section-label">Select a pin</p>
+              <h3>Live venue detail</h3>
+              <p class="support-copy">
+                Tap a marker or card to inspect live buzz, route friction, local
+                chatter, and social presence.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <aside class="panel social-panel">
+          <section class="panel-section social-hero">
+            <div class="section-heading">
+              <h3>People layer</h3>
+              <span>Stories, threads, friction</span>
+            </div>
+            <div class="presence-row" id="presenceRow"></div>
+          </section>
+
+          <section class="panel-section">
+            <div class="social-tabs" id="socialTabs" role="tablist" aria-label="Social feed">
+              <button class="social-tab active" data-tab="stories">Stories</button>
+              <button class="social-tab" data-tab="threads">Threads</button>
+              <button class="social-tab" data-tab="alerts">Alerts</button>
+            </div>
+            <div class="feed-panel" id="feedPanel"></div>
+          </section>
+
+          <section class="panel-section composer-card">
+            <div class="section-heading">
+              <h3>Quick post</h3>
+              <span>Designed for in-the-moment updates</span>
+            </div>
+            <div class="composer-actions">
+              <button class="composer-chip">Drop a story</button>
+              <button class="composer-chip">Start a thread</button>
+              <button class="composer-chip">Report a slowdown</button>
+            </div>
+            <p class="support-copy">
+              The social graph is local-first: posts decay fast, context stays
+              close, and discovery comes from activity instead of follower count.
+            </p>
+          </section>
+        </aside>
+      </main>
+
+      <nav class="mobile-rail" aria-label="Quick navigation">
+        <button class="rail-item active">Map</button>
+        <button class="rail-item">Discover</button>
+        <button class="rail-item">Social</button>
+      </nav>
+    </div>
+  </body>
+</html>
